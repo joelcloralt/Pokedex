@@ -29,11 +29,37 @@ class PokemonDetailViewController: UIViewController {
         super.viewDidLoad()
 
         nameLbl.text = pokemon.name
-        mainImg.image = UIImage(named: "\(pokemon.pokedexId)")
+        let img = UIImage(named: "\(pokemon.pokedexId)")
+        mainImg.image = img
+        currentEvoImg.image = img
         
         pokemon.downloadPokemonDetails { () -> () in
             //this will be called after download is done
+            self.updateUI()
         }
+    }
+    
+    func updateUI() {
+        mainDescription.text = pokemon.description
+        typeLbl.text = pokemon.type
+        defenseLbl.text = pokemon.defense
+        heightLbl.text = pokemon.height
+        weightLbl.text = pokemon.weight
+        pokedexLbl.text = "\(pokemon.pokedexId)"
+        baseAttackLbl.text = pokemon.attack
+        if pokemon.nextEvolutionId == "" {
+            nextEvolutionLbl.text = "No Evolutions"
+            nextEvoImg.hidden = true
+        } else {
+            nextEvoImg.hidden = false
+            nextEvoImg.image = UIImage(named: pokemon.nextEvolutionId)
+            var str = "Next Evolution: \(pokemon.nextEvolutionTxt)"
+            
+            if pokemon.nextEvolutionLevel != "" {
+                str += " - Level \(pokemon.nextEvolutionLevel)"
+            }
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,9 +67,9 @@ class PokemonDetailViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
     
     @IBAction func backButtonPressed(sender: AnyObject) {
+        print("back button anyone?")
         dismissViewControllerAnimated(true, completion: nil)
     }
 }
